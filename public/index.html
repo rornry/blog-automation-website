@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>블로그 자동화 - AI 기반 콘텐츠 생성 및 관리</title>
+  <meta name="description" content="AI 기반 블로그 자동화 플랫폼. 데스크톱 앱, 모바일 앱, 웹 서비스로 블로그 콘텐츠를 자동으로 생성하고 관리합니다.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #ffffff;
+      color: #111827;
+    }
+
+    .btn-primary {
+      padding: 12px 24px;
+      background-color: #2563eb;
+      color: white;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+      background-color: #1d4ed8;
+    }
+
+    .btn-secondary {
+      padding: 12px 24px;
+      background-color: #e5e7eb;
+      color: #1f2937;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background-color: #d1d5db;
+    }
+
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 1.25rem;
+      color: #4b5563;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      padding: 24px;
+      transition: box-shadow 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      background-color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    nav .container {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav .logo-icon {
+      font-size: 1.5rem;
+    }
+
+    nav .logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    nav .nav-links {
+      display: none;
+      gap: 32px;
+    }
+
+    @media (min-width: 768px) {
+      nav .nav-links {
+        display: flex;
+      }
+    }
+
+    nav a {
+      color: #4b5563;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #2563eb;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    .container {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .hero {
+      background: linear-gradient(to right, #2563eb, #1e40af);
+      color: white;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 32px;
+      color: #dbeafe;
+    }
+
+    .hero .buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero .btn-primary {
+      background-color: white;
+      color: #2563eb;
+    }
+
+    .hero .btn-primary:hover {
+      background-color: #f3f4f6;
+    }
+
+    .hero .btn-secondary {
+      border: 2px solid white;
+      background-color: transparent;
+      color: white;
+    }
+
+    .hero .btn-secondary:hover {
+      background-color: white;
+      color: #2563eb;
+    }
+
+    .features {
+      background-color: #f9fafb;
+    }
+
+    .grid {
+      display: grid;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .feature-icon {
+      font-size: 2.25rem;
+      margin-bottom: 16px;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      color: #4b5563;
+    }
+
+    .apps-grid {
+      display: grid;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    @media (min-width: 768px) {
+      .apps-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .app-card {
+      border: 2px solid #2563eb;
+    }
+
+    .app-icon {
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .app-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .app-list {
+      list-style: none;
+      margin-bottom: 24px;
+      color: #4b5563;
+    }
+
+    .app-list li {
+      margin-bottom: 8px;
+    }
+
+    .app-card .btn-primary {
+      width: 100%;
+    }
+
+    .blog-section {
+      background-color: #f9fafb;
+    }
+
+    .blog-post {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      padding: 32px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 24px;
+    }
+
+    .blog-post h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .blog-post p {
+      color: #4b5563;
+      margin-bottom: 16px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+    }
+
+    .tag-primary {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .tag-secondary {
+      background-color: #dbeafe;
+      color: #2563eb;
+    }
+
+    .blog-section .btn-primary {
+      width: 100%;
+    }
+
+    .stats {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .stats h2 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .stats-grid {
+      display: grid;
+      gap: 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stat-value {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      color: #dbeafe;
+    }
+
+    footer {
+      background-color: #111827;
+      color: white;
+      padding: 48px 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    footer h4 {
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    footer p {
+      color: #9ca3af;
+    }
+
+    footer ul {
+      list-style: none;
+      color: #9ca3af;
+    }
+
+    footer ul li {
+      margin-bottom: 8px;
+    }
+
+    footer a {
+      color: #9ca3af;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #374151;
+      padding-top: 32px;
+      text-align: center;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <div class="logo">
+        <span class="logo-icon">📝</span>
+        <span class="logo-text">블로그 자동화</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">기능</a>
+        <a href="#apps">앱</a>
+        <a href="#blog">블로그</a>
+        <a href="#stats">통계</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>AI 기반 블로그 자동화 플랫폼</h1>
+      <p>에이전틱 AI로 블로그 콘텐츠를 자동으로 생성하고 관리하세요</p>
+      <div class="buttons">
+        <button class="btn-primary">시작하기</button>
+        <button class="btn-secondary">자세히 보기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="section-title">주요 기능</h2>
+      <p class="section-subtitle">3가지 플랫폼에서 일관된 블로그 자동화 경험을 제공합니다</p>
+      
+      <div class="grid">
+        <div class="card">
+          <div class="feature-icon">🤖</div>
+          <h3 class="feature-title">AI 콘텐츠 생성</h3>
+          <p class="feature-desc">OpenAI GPT-4를 활용한 고품질 블로그 포스트 자동 생성</p>
+        </div>
+
+        <div class="card">
+          <div class="feature-icon">📱</div>
+          <h3 class="feature-title">다중 플랫폼</h3>
+          <p class="feature-desc">데스크톱, 모바일, 웹에서 언제 어디서나 접근 가능</p>
+        </div>
+
+        <div class="card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">통계 분석</h3>
+          <p class="feature-desc">포스팅 성과를 실시간으로 추적하고 분석합니다</p>
+        </div>
+
+        <div class="card">
+          <div class="feature-icon">⏰</div>
+          <h3 class="feature-title">자동 스케줄링</h3>
+          <p class="feature-desc">포스트 발행 시간을 미리 설정하고 자동으로 게시</p>
+        </div>
+
+        <div class="card">
+          <div class="feature-icon">🎨</div>
+          <h3 class="feature-title">SEO 최적화</h3>
+          <p class="feature-desc">검색 엔진 최적화를 자동으로 적용합니다</p>
+        </div>
+
+        <div class="card">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">안전한 저장</h3>
+          <p class="feature-desc">로컬 및 클라우드 저장소에 안전하게 보관</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Apps Section -->
+  <section id="apps">
+    <div class="container">
+      <h2 class="section-title">플랫폼</h2>
+      <p class="section-subtitle">3가지 플랫폼에서 동일한 기능을 제공합니다</p>
+
+      <div class="apps-grid">
+        <div class="card app-card">
+          <div class="app-icon">🖥️</div>
+          <h3 class="app-title">데스크톱 앱</h3>
+          <ul class="app-list">
+            <li>✓ Python + PyQt6</li>
+            <li>✓ Windows, Mac, Linux</li>
+            <li>✓ 오프라인 작업 지원</li>
+            <li>✓ 고급 편집 기능</li>
+          </ul>
+          <button class="btn-primary">다운로드</button>
+        </div>
+
+        <div class="card app-card">
+          <div class="app-icon">📱</div>
+          <h3 class="app-title">모바일 앱</h3>
+          <ul class="app-list">
+            <li>✓ React Native + Expo</li>
+            <li>✓ iOS & Android</li>
+            <li>✓ 터치 최적화</li>
+            <li>✓ 빠른 접근</li>
+          </ul>
+          <button class="btn-primary">설치하기</button>
+        </div>
+
+        <div class="card app-card">
+          <div class="app-icon">🌐</div>
+          <h3 class="app-title">웹 앱</h3>
+          <ul class="app-list">
+            <li>✓ Next.js + React</li>
+            <li>✓ 모든 브라우저 지원</li>
+            <li>✓ 즉시 접근</li>
+            <li>✓ 클라우드 동기화</li>
+          </ul>
+          <button class="btn-primary">시작하기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section id="blog" class="blog-section">
+    <div class="container">
+      <h2 class="section-title">최신 블로그</h2>
+      <p class="section-subtitle">AI와 블로그 자동화에 관한 최신 정보</p>
+
+      <div class="blog-post">
+        <div>
+          <h3>2026년 에이전틱 AI(Agentic AI) 완전 정복</h3>
+          <p>2026년 주목받는 에이전틱 AI(Agentic AI)가 자율적으로 업무를 혁신하는 방법과 산업별 적용 사례, 미래 전망을 자세히 알아보세요.</p>
+          <div class="tags">
+            <span class="tag tag-primary">AI 트렌드</span>
+            <span class="tag tag-secondary">2026년</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary">모든 블로그 보기</button>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section id="stats" class="stats">
+    <div class="container">
+      <h2>프로젝트 통계</h2>
+      
+      <div class="stats-grid">
+        <div>
+          <div class="stat-value">3</div>
+          <p class="stat-label">플랫폼</p>
+        </div>
+        <div>
+          <div class="stat-value">12+</div>
+          <p class="stat-label">기능</p>
+        </div>
+        <div>
+          <div class="stat-value">100%</div>
+          <p class="stat-label">오픈소스</p>
+        </div>
+        <div>
+          <div class="stat-value">∞</div>
+          <p class="stat-label">확장성</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>블로그 자동화</h4>
+          <p>AI 기반 블로그 자동화 플랫폼</p>
+        </div>
+        <div>
+          <h4>제품</h4>
+          <ul>
+            <li><a href="#">데스크톱 앱</a></li>
+            <li><a href="#">모바일 앱</a></li>
+            <li><a href="#">웹 앱</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>리소스</h4>
+          <ul>
+            <li><a href="#">문서</a></li>
+            <li><a href="#">튜토리얼</a></li>
+            <li><a href="#">API</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>연락처</h4>
+          <ul>
+            <li><a href="mailto:info@blogautomation.com">이메일</a></li>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Twitter</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 블로그 자동화. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
